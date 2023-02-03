@@ -1,0 +1,9 @@
+
+=================================================================
+==288==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 1024 byte(s) in 1 object(s) allocated from:
+    #0 0x4c102f  (/home/runner/DynamicAllocStr/main+0x4c102f)
+    #1 0x4f77d2  (/home/runner/DynamicAllocStr/main+0x4f77d2)
+
+SUMMARY: AddressSanitizer: 1024 byte(s) leaked in 1 allocation(s).
