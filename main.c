@@ -32,6 +32,13 @@
 
 #define BIGGULP 1024
 
+typedef struct n2s n2s;
+struct n2s {
+  int    nr;
+  char * nstr;
+  size_t nstr_sz;
+};
+
 char * number_to_string(int number) {
   char * str = malloc(BIGGULP);
   if (str == NULL) {
@@ -42,44 +49,41 @@ char * number_to_string(int number) {
   return str;
 }
 
-int main(void) {
-  char * nstr = number_to_string(123);
-  size_t nstr_sz = strlen(nstr);
+static
+n2s sample[] = {
+  { .nr = 123, },
+  { .nr = INT_MAX, },
+  { .nr = INT_MIN, },
+};
+size_t n2s_sz = sizeof sample / sizeof *sample;
 
-  printf("%p %4zu\n", nstr, nstr_sz);
-  nstr = realloc(nstr, nstr_sz + 1);
-  printf("%15s\n", nstr);
-  free(nstr);
-  putchar('\n');
+int main(int argc, char const * argv[]) {
+  for (size_t s_ = 0ul; s_ < n2s_sz; ++s_) {
+    sample[s_].nstr = number_to_string(sample[s_].nr);
+    sample[s_].nstr_sz = strlen(sample[s_].nstr);
 
-  nstr = number_to_string(INT_MAX);
-  nstr_sz = strlen(nstr);
+    printf("%p %4zu\n",
+           sample[s_].nstr,
+           sample[s_].nstr_sz);
+    sample[s_].nstr = realloc(sample[s_].nstr,
+                              sample[s_].nstr_sz);
+    printf("%p %4zu\n",
+           sample[s_].nstr,
+           sample[s_].nstr_sz);
+    printf("+%15d\n", sample[s_].nr);
+    printf(">%15s\n", sample[s_].nstr);
+    free(sample[s_].nstr);
+    putchar('\n');
+  }
 
-  printf("%p %4zu\n", nstr, nstr_sz);
-  nstr = realloc(nstr, nstr_sz + 1);
-  printf("%15s\n", nstr);
-  free(nstr);
-  putchar('\n');
-
-  nstr = number_to_string(INT_MIN);
-  nstr_sz = strlen(nstr);
-
-  printf("%p %4zu\n", nstr, nstr_sz);
-  nstr = realloc(nstr, nstr_sz + 1);
-  printf("%15s\n", nstr);
-  free(nstr);
-  putchar('\n');
-
-  nstr = number_to_string(INT_MIN);
-  nstr_sz = strlen(nstr);
-
-  printf("%p %4zu\n", nstr, nstr_sz);
-  nstr = realloc(nstr, nstr_sz + 1);
-  printf("%15s\n", nstr);
-  free(nstr);
-  putchar('\n');
-
+// #define LET_IT_LEAK
+#ifdef LET_IT_LEAK
   printf("%s\n", number_to_string(123));
+#else
+  char * kp = NULL;
+  printf("~%15s\n", (kp = number_to_string(123)));
+  free(kp);
+#endif
 
   return EXIT_SUCCESS;
 }
