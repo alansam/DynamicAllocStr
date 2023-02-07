@@ -1,3 +1,8 @@
+//  This is free and unencumbered software
+//  released into the public domain.
+//  @see  LICENSE.md
+//  @see  https://unlicense.org
+
 /*
 ->  number_to_string takes integer as argument and convert it to string
     i need to return a dynamically allocated string 
